@@ -1,0 +1,8 @@
+out/
+bin/
+*.class
+*.jar
+.vscode/
+*.code-workspace
+Thumbs.db
+.DS_Store
