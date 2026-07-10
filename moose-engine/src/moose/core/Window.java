@@ -6,9 +6,15 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 
 import org.lwjgl.opengl.GLCapabilities;
-
 import moose.graphics.Drawable;
 
+/**
+ * Manages an individual OS window lifecycle, its OpenGL rendering context, and input callbacks.
+ *
+ * @author boardedmind
+ * @since 0.2.0-alpha
+ * @version 0.2.0-alpha
+ */
 class Window {
 
     private int width, height;
@@ -17,6 +23,14 @@ class Window {
     private final Drawable drawable;
     private long windowID = 0;
 
+    /**
+     * Allocates native GLFW window resources, setups resize callbacks, and initializes the graphics pipeline.
+     *
+     * @param lifecycle The simulation runtime hooks to update and render.
+     * @param config    The layout and behaviors configuration parameters.
+     * @param drawable  The underlying rendering canvas abstraction.
+     * @throws IllegalStateException If the native GLFW window handle allocation fails.
+     */
     public Window(Lifecycle lifecycle, MooseConfig config, Drawable drawable) {
         this.lifecycle = lifecycle;
         this.width = config.width;
@@ -50,35 +64,69 @@ class Window {
         drawable.show(windowID);
     }
 
+    /**
+     * Gets the unique native memory address handle for this window.
+     *
+     * @return The GLFW native window ID handle.
+     */
     public Long getID() {
         return windowID;
     }
 
+    /**
+     * Gets the canvas element assigned to execute drawing pipelines within this context.
+     *
+     * @return The drawable target instance.
+     */
     public Drawable getDrawable() {
         return drawable;
     }
 
+    /**
+     * Gets the thread-mapped OpenGL capabilities schema compiled for this window profile.
+     *
+     * @return The cached capability definitions block.
+     */
     public GLCapabilities getCacheCapabilities() {
         return cacheCapabilities;
     }
 
+    /**
+     * Evaluates state routines for the application layer.
+     *
+     * @param deltaTime The elapsed timing frame slice in seconds.
+     */
     public void update(float deltaTime) {
         lifecycle.update(deltaTime);
     }
 
+    /**
+     * Clears depth and color framebuffers before passing execution to the application canvas layer.
+     */
     public void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         lifecycle.render();
     }
 
+    /**
+     * Checks if the window has been flagged for termination by the OS or user interaction.
+     *
+     * @return True if the window should exit its routine; false otherwise.
+     */
     public boolean shouldClose() {
         return glfwWindowShouldClose(windowID);
     }
 
+    /**
+     * Swaps the front and back drawing framebuffers to display the rendered image.
+     */
     public void swapBuffers() {
         glfwSwapBuffers(windowID);
     }
 
+    /**
+     * Teardown native bindings, flushes callbacks, disposes draw pipeline allocations, and kills the window.
+     */
     public void destroy() {
         if (windowID == 0) return;
 

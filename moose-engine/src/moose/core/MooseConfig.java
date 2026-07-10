@@ -1,8 +1,11 @@
 package moose.core;
 
 /**
- * 
- * MooseConfig
+ * Configuration settings for the MooseEngine window and display lifecycle.
+ *
+ * @author boardedmind
+ * @since 0.2.0-alpha
+ * @version 0.2.0-alpha
  */
 
 public class MooseConfig {

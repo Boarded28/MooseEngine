@@ -1,58 +1,57 @@
 package moose.core;
 
 /**
- * The central orchestration interface for the MooseEngine core lifecycle.
+ * Orchestrates the central runtime execution loop for the engine.
  * 
- * <p>This interface serves as the primary subsystem coordinator, driving execution by 
- * linking directly to the {@link MooseEngine#runEngineLoop}.</p>
+ * <p>Coordinates core subsystems by linking directly into the 
+ * internal engine execution loop.</p>
  * 
  * <h3>Usage Example:</h3>
  * <pre>{@code
  * @Override
  * public void update(float deltaTime) {
- *     // Place your logic here
- *     myObject.x += myObject.speed * deltaTime;
+ *     position.x += speed * deltaTime;
  * }
  * 
  * @Override
  * public void render() {
- *     // Place your drawables here
- *     moose.MooseGraphics.drawRectangle(...);
+ *     MooseGraphics.drawRectangle(position.x, position.y, 50, 50);
  * }
  * }</pre>
  * 
- * <p>The {@code deltaTime} parameter represents the strict 'fixed time step' provided by 
- * the accumulator model. This ensures updates, such as physics calculations, remain 
- * entirely consistent and deterministic regardless of rendering frame rates.</p>
- * 
- * @see Clock
  * @author Boardedmind
- * @version 0.1.0-alpha
  * @since 0.1.0-alpha
+ * @version 0.2.0-alpha
+ * @see Clock
  */
-
 public interface Lifecycle {
 
     /**
      * Updates the simulation or game state using a fixed time step.
      * 
-     * <p>This method is automatically invoked by the framework's internal {@code MooseEngine} 
-     * loop on a strict, constant interval. It is intended to contain all state mutation 
-     * logic, such as 2D physics transformations, collision detection, and AI updates.</p>
+     * <p>Invoked on a strict, constant interval by the engine accumulator loop. 
+     * Handles deterministic state logic like physics calculations, transforms, 
+     * collision detection, and AI routines.</p>
      * 
-     * <p>Because this execution is bound to a fixed accumulator step, the provided 
-     * {@code deltaTime} value remains constant across invocations. This guarantees that your 
-     * simulation behaves identically and deterministically on all hardware, regardless of 
-     * fluctuating rendering frame rates.</p>
+     * <p><b>Constraints:</b> Do not place rendering, drawing, or visual buffer 
+     * operations inside this method.</p>
      * 
-     * <h3>Implementation Note:</h3>
-     * <p>Do not place rendering, drawing, or visual buffer operations inside this method. 
-     * Use this method strictly for calculations and state modifications.</p>
-     * 
-     * @param deltaTime the constant, fractional time step (in seconds) used to scale 
-     *                  physics and simulation logic calculations
-     * @since 1.0.0
-    */
+     * @param deltaTime The constant, fractional time step in seconds.
+     * @since 0.1.0-alpha
+     */
     void update(float deltaTime);
+
+    /**
+     * Renders the current frame visual elements to the screen buffer.
+     * 
+     * <p>Invoked continuously by the engine loop immediately following the 
+     * update cycle. Handles canvas drawing, matrix transformations, and 
+     * graphical pipeline flushing.</p>
+     * 
+     * <p><b>Constraints:</b> Do not modify game or simulation states inside 
+     * this method to maintain rendering and logic decoupling.</p>
+     * 
+     * @since 0.2.0-alpha
+     */
     void render();
 }

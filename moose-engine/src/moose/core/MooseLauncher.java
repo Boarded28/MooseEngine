@@ -1,31 +1,33 @@
 package moose.core;
 
 /**
- * The main entry point for starting the MooseEngine framework.
+ * Provides static bootstrapping methods to initialize and run the MooseEngine framework.
  * 
- * <p>The main class of the game or simulation must implement the {@link Lifecycle} interface. 
- * Then, within the application's {@code main} method, this framework must be initialized 
- * using the launcher:</p>
+ * <p>Applications must implement the {@link Lifecycle} interface and boot the framework 
+ * using this launcher within their main execution entry point.</p>
  * 
+ * <h3>Usage Example:</h3>
  * <pre>{@code
  * import moose.core.*;
  * 
  * public class MyMainClass implements Lifecycle {
  *     public static void main(String[] args) {
  *         MooseLauncher.launch(new MyMainClass());
+ *         MooseLauncher.start();
  *     }
  * }
  * }</pre>
  * 
  * @author boardedmind
- * @version 0.1.0-alpha
  * @since 0.1.0-alpha
+ * @version 0.2.0-alpha
  */
 public class MooseLauncher {    
 
     /**
-     * Launch the program with default values, only passing the {@link Lifecycle}.
-     * @param lifecycle
+     * Registers a lifecycle target using a default window configuration profile.
+     * 
+     * @param lifecycle The core simulation loop implementation to attach.
      */
     public static void launch(Lifecycle lifecycle) {
         MooseEngine engine = MooseEngine.getInstance();
@@ -33,11 +35,11 @@ public class MooseLauncher {
         engine.registerBinder(new moose.graphics.GraphicsManager());
     }
 
-
     /**
-     * Launch the program with user configured values, passing {@link Lifecycle} and {@link MooseConfig}.
-     * @param lifecycle
-     * @param config
+     * Registers a lifecycle target using tailored window and display properties.
+     * 
+     * @param lifecycle The core simulation loop implementation to attach.
+     * @param config    The custom configuration properties to apply to the window.
      * @see MooseConfig
      */
     public static void launch(Lifecycle lifecycle, MooseConfig config) {
@@ -46,8 +48,12 @@ public class MooseLauncher {
         engine.registerBinder(new moose.graphics.GraphicsManager());
     }
 
+    /**
+     * Starts the underlying engine subsystems and initiates the main application thread loop.
+     * 
+     * <p>This method blocks execution on the calling thread until all windows are closed.</p>
+     */
     public static void start() {
         MooseEngine.getInstance().start();        
     }
-
 }
