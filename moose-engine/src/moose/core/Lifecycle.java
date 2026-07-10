@@ -4,7 +4,7 @@ package moose.core;
  * The central orchestration interface for the MooseEngine core lifecycle.
  * 
  * <p>This interface serves as the primary subsystem coordinator, driving execution by 
- * linking directly to the {@link Clock#logicUpdate(float)} loop.</p>
+ * linking directly to the {@link MooseEngine#runEngineLoop}.</p>
  * 
  * <h3>Usage Example:</h3>
  * <pre>{@code
@@ -12,6 +12,12 @@ package moose.core;
  * public void update(float deltaTime) {
  *     // Place your logic here
  *     myObject.x += myObject.speed * deltaTime;
+ * }
+ * 
+ * @Override
+ * public void render() {
+ *     // Place your drawables here
+ *     moose.MooseGraphics.drawRectangle(...);
  * }
  * }</pre>
  * 
@@ -21,16 +27,16 @@ package moose.core;
  * 
  * @see Clock
  * @author Boardedmind
- * @version 1.0.1
- * @since 1.0.0
+ * @version 0.1.0-alpha
+ * @since 0.1.0-alpha
  */
 
-public interface Environment {
+public interface Lifecycle {
 
     /**
      * Updates the simulation or game state using a fixed time step.
      * 
-     * <p>This method is automatically invoked by the framework's internal {@code Chronometer} 
+     * <p>This method is automatically invoked by the framework's internal {@code MooseEngine} 
      * loop on a strict, constant interval. It is intended to contain all state mutation 
      * logic, such as 2D physics transformations, collision detection, and AI updates.</p>
      * 
@@ -45,9 +51,8 @@ public interface Environment {
      * 
      * @param deltaTime the constant, fractional time step (in seconds) used to scale 
      *                  physics and simulation logic calculations
-     * @see Environment
-     * @see Clock
      * @since 1.0.0
     */
     void update(float deltaTime);
+    void render();
 }
