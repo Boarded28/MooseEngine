@@ -1,4 +1,4 @@
-package moose.inputs;
+package moose.input;
 
 import static org.lwjgl.glfw.GLFW.*;
 
