@@ -1,5 +1,5 @@
 package moose.components;
 
-public class GPanel {
+public class GPanel extends GContainer {
     
 }

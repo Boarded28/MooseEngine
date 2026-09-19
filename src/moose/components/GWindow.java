@@ -1,5 +1,5 @@
 package moose.components;
 
-public class GWindow {
+public class GWindow extends GContainer {
     
 }

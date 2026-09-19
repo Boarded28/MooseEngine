@@ -1,18 +1,16 @@
 package moose;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import moose.components.GContainer;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class MooseEngine {
 
     private float ticks = 60.0f;
     private float tps = 1.0f/ticks;
 
-    private GContainer rootContainer;
+    private Application application;
 
-    public MooseEngine() {
+    public static void init() {
         
     }
 }
